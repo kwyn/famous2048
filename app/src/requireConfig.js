@@ -7,6 +7,7 @@ require.config({
         famous: '../lib/famous',
         requirejs: '../lib/requirejs/require',
         almond: '../lib/almond/almond',
+        src: '../src',
         'famous-polyfills': '../lib/famous-polyfills/index'
     }
 });
