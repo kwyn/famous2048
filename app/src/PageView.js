@@ -26,6 +26,7 @@ define(function(require, exports, module) {
                 backgroundColor: 'black'
             }
         });
+
         this._add(this.backgroundSurface);
     }
 
@@ -35,6 +36,7 @@ define(function(require, exports, module) {
             origin: [0.5, 0],
             transform: Transform.translate(0, 250, 0)
         })
+        this.gameView.pipe(this._eventOutput);
         this._add(gameViewMod).add(this.gameView);
     };
 

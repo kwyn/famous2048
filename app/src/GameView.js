@@ -18,14 +18,16 @@
     GameView.DEFAULT_OPTIONS = {};
 
     function _createGameView() {
-  		var backgroundSurface = new Surface({
+  		this.backgroundSurface = new Surface({
   				size: [width, height],
           properties: {
               backgroundColor: 'rgb(176,176,176)',
               borderRadius: '5px'
           }
        });
-  		this._add(backgroundSurface);
+      this.backgroundSurface.pipe(this._eventOutput);
+
+  		this._add(this.backgroundSurface);
     }
 
     module.exports = GameView;
