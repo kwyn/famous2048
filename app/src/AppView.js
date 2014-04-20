@@ -10,7 +10,7 @@ define(function(require, exports, module) {
     var PageView        = require('./PageView');
 
     GenericSync.register(TouchSync);
-
+    console.log(GenericSync);
     function AppView() {
         View.apply(this, arguments);
 
@@ -33,16 +33,29 @@ define(function(require, exports, module) {
     }
 
     function _handleTouch() {
-        this.pageViewPos = 0;
+        this.pageViewX = 0;
+        this.pageViewY = 0;
 
-        this.sync = new GenericSync(function() {
-            return this.pageViewPos;
+        this.latteralSync = new GenericSync(function() {
+            return this.pageViewX;
         }.bind(this), {direction: GenericSync.DIRECTION_X});
 
-        this.pageView.pipe(this.sync);
+        this.verticalSync = new GenericSync(function(){
+            return this.pageViewY;
+        }.bind(this), {direction: GenericSync.DIRECTION_Y});
 
-        this.sync.on('update', function(data) {
-            console.log(data);
+        this.pageView.pipe(this.latteralSync);
+        this.pageView.pipe(this.verticalSync);
+
+        this.latteralSync.on('update', function(data) {
+            if(Math.abs(data.delta) > 0 )
+                console.log('x = ' +data.delta);
+            this.pageViewPos = data.p;
+            this.pageMod.setTransform(Transform.translate(data.p, 0, 0));
+        }.bind(this));
+         this.verticalSync.on('update', function(data) {
+            if(Math.abs(data.delta) > 0 )
+                console.log('y = ' + data.delta);
             this.pageViewPos = data.p;
             this.pageMod.setTransform(Transform.translate(data.p, 0, 0));
         }.bind(this));
