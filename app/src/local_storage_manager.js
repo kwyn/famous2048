@@ -19,7 +19,7 @@ define(function(require, module, exports){
     }
   };
 
-  function LocalStorageManager() {
+  function LocalStorageManager(){
     this.bestScoreKey     = "bestScore";
     this.gameStateKey     = "gameState";
 
@@ -62,5 +62,6 @@ define(function(require, module, exports){
   LocalStorageManager.prototype.clearGameState = function () {
     this.storage.removeItem(this.gameStateKey);
   };
+
   module.exports = LocalStorageManager;
 });

@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    var Engine         = require('famous/core/Engine')
     var Surface         = require('famous/core/Surface');
     var Modifier        = require('famous/core/Modifier');
     var Transform       = require('famous/core/Transform');
@@ -19,10 +20,18 @@ define(function(require, exports, module) {
 
     function _createPageView() {
         this.pageView = new PageView();
-        this.pageMod = new Modifier();
+        this.pageMod = new Modifier({
+            origin: [0.5,0]
+        });
 
         this._add(this.pageMod).add(this.pageView);
     }
+
+    // function _handleTouch() {
+    //     this.sync = GenericSync(function(){
+
+    //     }.bind(this),{direction: GenericSync.DIRECTION_X} )
+    // }
 
     module.exports = AppView;
 });
