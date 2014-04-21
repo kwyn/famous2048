@@ -12,15 +12,14 @@ define(function(require, module, exports){
     this.startTiles     = 2;
     //origonal event
     this.inputManager.on("move", this.move.bind(this));
+    this.inputManager.on("restart", this.restart.bind(this));
     //new event
     controller.on("move", this.move.bind(this));
-    
-    this.inputManager.on("restart", this.restart.bind(this));
+    controller.on("restart", this.restart.bind(this));
     this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
 
     this.setup();
   }
-
   // Restart the game
   GameManager.prototype.restart = function () {
     this.storageManager.clearGameState();

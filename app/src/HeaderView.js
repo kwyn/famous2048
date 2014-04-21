@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var View            = require('famous/core/View');
 
     var ScoreView       = require('src/ScoreView');
-
+    var controller      = require('src/controller');
     var LocalStorageManager = require('src/local_storage_manager');
 
     var storage = new LocalStorageManager.exports();
@@ -30,7 +30,26 @@ define(function(require, exports, module) {
                 backgroundColor: 'black'
             }
         });
+
+        this.newGameButton = new Surface({
+            size: [100, 50],
+            content: 'New Game',
+            properties:{
+                color: 'white',
+                border: '1px solid grey',
+                borderRadius: '5px',
+                textAlign: 'center'
+            }
+        })
         
+        this.newGameButton.on('click', function(){
+            controller.emit('restart');
+        }.bind(this));
+
+        this.newGameMod = new Modifier({
+            transform: Transform.translate(150, 150, 0)
+        });
+
         this.titleSurface = new Surface({
             size:[width/2, height],
             content: '20.48',
@@ -70,6 +89,7 @@ define(function(require, exports, module) {
         this._add(this.titleModifier).add(this.titleSurface);
         this._add(this.bestScoreModifier).add(bestScoreView);
         this._add(this.scoreModifier).add(scoreView);
+        this._add(this.newGameMod).add(this.newGameButton);
     };
 
     module.exports = HeaderView;

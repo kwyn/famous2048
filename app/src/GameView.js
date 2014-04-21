@@ -48,7 +48,7 @@
           for(var j = 0; j < 4; j++){
               var tile = new Surface({
               size:[100,100],
-              content: i + ' ' + j,
+              content: '',
                 properties:{
                   backgroundColor: 'grey',
                   borderRadius: '3px',
@@ -93,14 +93,14 @@
       this.eventHandler.subscribe(controller);
 
       this.eventHandler.on('addTile', function(data){
-        console.log(data.tile);
-        console.log(this);
+        if(data.tile.previousPosition)
+          this.tiles[data.tile.previousPosition.x * 4 + data.tile.previousPosition.y].setContent('');
         this.tiles[data.tile.x * 4 + data.tile.y].setContent(data.tile.value);
       }.bind(this));
 
-      this.eventHandler.on('merged', function(data){
-        console.log(data.tile);
-      }.bind(this));
+      // this.eventHandler.on('merged', function(data){
+      //   console.log(data.tile);
+      // }.bind(this));
       
     }
 

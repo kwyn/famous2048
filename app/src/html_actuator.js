@@ -13,7 +13,7 @@ define(function(require, exports, module) {
     var self = this;
 
     window.requestAnimationFrame(function () {
-      self.clearContainer(self.tileContainer);
+      // self.clearContainer(self.tileContainer);
 
       grid.cells.forEach(function (column) {
         column.forEach(function (cell) {
@@ -69,9 +69,9 @@ define(function(require, exports, module) {
     //     self.applyClasses(wrapper, classes); // Update the position
     //   });
     // } else 
-    console.log('addtile')
     if (tile.mergedFrom) {
-      controller.emit('merge', {
+      console.log('merge')
+      controller.emit('addTile', {
         class:'',
         tile:tile
       });
@@ -83,6 +83,7 @@ define(function(require, exports, module) {
         self.addTile(merged);
       });
     } else {
+      console.log('add');
       // classes.push("tile-new");
       // this.applyClasses(wrapper, classes);
       controller.emit('addTile',{
@@ -111,10 +112,9 @@ define(function(require, exports, module) {
   };
 
   HTMLActuator.prototype.updateScore = function (score) {
-    if(score > this.score){
       controller.emit("scoreUpdate", {title:'score', value: score});
       this.score += score-this.score;
-    }
+      console.log(this.score);
   };
 
   HTMLActuator.prototype.updateBestScore = function (bestScore) {
