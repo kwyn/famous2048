@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+  var controller = require('src/controller');
   function HTMLActuator() {
     this.tileContainer    = document.querySelector(".tile-container");
     this.scoreContainer   = document.querySelector(".score-container");
@@ -105,19 +106,9 @@ define(function(require, exports, module) {
   };
 
   HTMLActuator.prototype.updateScore = function (score) {
-    this.clearContainer(this.scoreContainer);
-
-    var difference = score - this.score;
-    this.score = score;
-
-    this.scoreContainer.textContent = this.score;
-
-    if (difference > 0) {
-      var addition = document.createElement("div");
-      addition.classList.add("score-addition");
-      addition.textContent = "+" + difference;
-
-      this.scoreContainer.appendChild(addition);
+    if(score > this.score){
+      controller.emit("scoreUpdate", {title:'score', value: score});
+      this.score += score-this.score;
     }
   };
 

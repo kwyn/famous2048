@@ -21,7 +21,7 @@ define(function(require, exports, module) {
 
     function _createBackground(){
         this.backgroundSurface = new Surface({
-            size: [500, undefined],
+            size: [undefined, undefined],
             properties:{
                 backgroundColor: 'black'
             }
@@ -31,13 +31,15 @@ define(function(require, exports, module) {
     }
 
     function _createGameView(){
-        this.gameView = new GameView();
-        var gameViewMod = new Modifier({
-            origin: [0.5, 0],
+        this.gameView = new GameView({
+            size:[500,500]
+        });
+        this.gameViewMod = new Modifier({
+            origin:[0.5,0],
             transform: Transform.translate(0, 250, 0)
         })
         this.gameView.pipe(this._eventOutput);
-        this._add(gameViewMod).add(this.gameView);
+        this._add(this.gameViewMod).add(this.gameView);
     };
 
     function _createHeaderView(){

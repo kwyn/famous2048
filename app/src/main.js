@@ -14,7 +14,10 @@ define(function(require, exports, module) {
     var mainContext = Engine.createContext();
 
     // your app here
-    var appView = new AppView();
+    var appView = new AppView({
+        size:[500,1000]
+    });
+    console.log(appView);
 
     mainContext.add(appView);
 

@@ -10,7 +10,6 @@ define(function(require, exports, module) {
     var PageView        = require('./PageView');
 
     GenericSync.register(TouchSync);
-    console.log(GenericSync);
     function AppView() {
         View.apply(this, arguments);
 
@@ -24,7 +23,9 @@ define(function(require, exports, module) {
     AppView.DEFAULT_OPTIONS = {};
 
     function _createPageView() {
-        this.pageView = new PageView();
+        this.pageView = new PageView({
+            size: [500,1000]
+        });
         this.pageMod = new Modifier({
             origin: [0.5,0]
         });
@@ -50,6 +51,7 @@ define(function(require, exports, module) {
         this.latteralSync.on('update', function(data) {
             if(Math.abs(data.delta) > 10 ) {
                 console.log('x = ' +data.position);
+                
                 this.pageViewX = data.position;
                 this.pageMod.setTransform(Transform.translate(data.position, 0, 0));
             }

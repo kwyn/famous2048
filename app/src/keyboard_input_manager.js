@@ -57,7 +57,7 @@ define(function(require, module, exports){
       var modifiers = event.altKey || event.ctrlKey || event.metaKey ||
                       event.shiftKey;
       var mapped    = map[event.which];
-
+      
       if (!modifiers) {
         if (mapped !== undefined) {
           event.preventDefault();

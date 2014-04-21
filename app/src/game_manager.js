@@ -2,7 +2,7 @@ define(function(require, module, exports){
   var Grid = require('src/grid');
   var Tile = require('src/tile');
   var controller = require('src/controller');
-  
+
   function GameManager(size, InputManager, Actuator, StorageManager) {
     this.size           = size; // Size of the grid
     this.inputManager   = new InputManager;
@@ -12,6 +12,7 @@ define(function(require, module, exports){
     this.startTiles     = 2;
 
     this.inputManager.on("move", this.move.bind(this));
+    controller.on("move", this.move.bind(this));
     this.inputManager.on("restart", this.restart.bind(this));
     this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
 
@@ -164,7 +165,7 @@ define(function(require, module, exports){
 
             self.grid.insertTile(merged);
             self.grid.removeTile(tile);
-            
+
             // Converge the two tiles' positions
             tile.updatePosition(positions.next);
 
