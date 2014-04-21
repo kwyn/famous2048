@@ -4,9 +4,9 @@ define(function(require, exports, module) {
     // import dependencies
     var Engine = require('famous/core/Engine');
     var AppView = require('src/AppView');
-    var Game = require('src/application');
     var GenericSync        = require('famous/inputs/GenericSync');
     var MouseSync          = require('famous/inputs/MouseSync');
+    var Game = require('src/application');
     var controller         = require('src/controller');
     require('famous/inputs/FastClick');
     GenericSync.register(MouseSync);

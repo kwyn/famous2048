@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
   var controller = require('src/controller');
   function HTMLActuator() {
-    this.tileContainer    = document.querySelector(".tile-container");
-    this.scoreContainer   = document.querySelector(".score-container");
-    this.bestContainer    = document.querySelector(".best-container");
-    this.messageContainer = document.querySelector(".game-message");
+    // this.tileContainer    = document.querySelector(".tile-container");
+    // this.scoreContainer   = document.querySelector(".score-container");
+    // this.bestContainer    = document.querySelector(".best-container");
+    // this.messageContainer = document.querySelector(".game-message");
 
     this.score = 0;
   }
@@ -14,6 +14,7 @@ define(function(require, exports, module) {
 
     window.requestAnimationFrame(function () {
       // self.clearContainer(self.tileContainer);
+      controller.emit('clear');
 
       grid.cells.forEach(function (column) {
         column.forEach(function (cell) {
@@ -61,35 +62,35 @@ define(function(require, exports, module) {
 
     // inner.classList.add("tile-inner");
     // inner.textContent = tile.value;
-
-    // if (tile.previousPosition) {
+    if (tile.previousPosition) {
     //   // Make sure that the tile gets rendered in the previous position first
     //   window.requestAnimationFrame(function () {
     //     classes[2] = self.positionClass({ x: tile.x, y: tile.y });
     //     self.applyClasses(wrapper, classes); // Update the position
     //   });
-    // } else 
-    if (tile.mergedFrom) {
-      console.log('merge')
-      controller.emit('addTile', {
-        class:'',
-        tile:tile
-      });
+      // controller.emit('addTile',{
+      //   tile: tile
+      // });
+    } else if (tile.mergedFrom) {
       // classes.push("tile-merged");
       // this.applyClasses(wrapper, classes);
-
       // Emits render events the tiles that merged
+      // controller.emit('addTile',{
+      //   tile:tile
+      // })
       tile.mergedFrom.forEach(function (merged) {
         self.addTile(merged);
       });
     } else {
-      console.log('add');
-      // classes.push("tile-new");
-      // this.applyClasses(wrapper, classes);
+      // controller.emit('addTile',{
+      //   tile:tile
+      // })
+    }
       controller.emit('addTile',{
         tile:tile
       })
-    }
+      // classes.push("tile-new");
+      // this.applyClasses(wrapper, classes);
 
     // Add the inner part of the tile to the wrapper
     // wrapper.appendChild(inner);
@@ -98,23 +99,22 @@ define(function(require, exports, module) {
     // this.tileContainer.appendChild(wrapper);
   };
 
-  HTMLActuator.prototype.applyClasses = function (element, classes) {
-    element.setAttribute("class", classes.join(" "));
-  };
+  // HTMLActuator.prototype.applyClasses = function (element, classes) {
+  //   element.setAttribute("class", classes.join(" "));
+  // };
 
   HTMLActuator.prototype.normalizePosition = function (position) {
     return { x: position.x + 1, y: position.y + 1 };
   };
 
-  HTMLActuator.prototype.positionClass = function (position) {
-    position = this.normalizePosition(position);
-    return "tile-position-" + position.x + "-" + position.y;
-  };
+  // HTMLActuator.prototype.positionClass = function (position) {
+  //   position = this.normalizePosition(position);
+  //   return "tile-position-" + position.x + "-" + position.y;
+  // };
 
   HTMLActuator.prototype.updateScore = function (score) {
-      controller.emit("scoreUpdate", {title:'score', value: score});
+      controller.emit("scoreUpdate", {title:'Score', value: score});
       this.score += score-this.score;
-      console.log(this.score);
   };
 
   HTMLActuator.prototype.updateBestScore = function (bestScore) {
@@ -131,8 +131,8 @@ define(function(require, exports, module) {
 
   HTMLActuator.prototype.clearMessage = function () {
     // IE only takes one value to remove at a time.
-    this.messageContainer.classList.remove("game-won");
-    this.messageContainer.classList.remove("game-over");
+    // this.messageContainer.classList.remove("game-won");
+    // this.messageContainer.classList.remove("game-over");
   };
 
   module.exports = HTMLActuator;

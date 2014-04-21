@@ -16,7 +16,7 @@ define(function(require, module, exports){
     //new event
     controller.on("move", this.move.bind(this));
     controller.on("restart", this.restart.bind(this));
-    this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+    controller.on('keepPlaying', this.keepPlaying.bind(this));
 
     this.setup();
   }
@@ -63,6 +63,7 @@ define(function(require, module, exports){
 
     // Update the actuator
     this.actuate();
+    controller.emit('begin');
   };
 
   // Set up the initial tiles to start the game with
@@ -77,7 +78,7 @@ define(function(require, module, exports){
     if (this.grid.cellsAvailable()) {
       var value = Math.random() < 0.9 ? 2 : 4;
       var tile = new Tile.exports(this.grid.randomAvailableCell(), value);
-
+      controller.emit('addTile', {tile: tile});
       this.grid.insertTile(tile);
     }
   };

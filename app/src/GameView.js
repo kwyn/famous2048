@@ -7,9 +7,9 @@
     var Easing          = require('famous/transitions/Easing');
     var Timer           = require('famous/utilities/Timer');
     var EventHandler    = require('famous/core/EventHandler');
-
+    var grid            = require('src/grid');
+    var Game            = require('src/application');
     var controller      = require('src/controller');
-
     var height = 500;
     var width = 500;
 
@@ -19,7 +19,6 @@
         _createTiles.call(this);
         _respondToLogic.call(this);
         _coords.call(this);
-        _animateTilesIn.call(this);
 
         console.log(this.tiles);
     };
@@ -45,6 +44,7 @@
       this.tileModifiers = [];
       this.tiles = []
         for(var i = 0; i < 4; i++) {
+          this.tiles.push([]);
           for(var j = 0; j < 4; j++){
               var tile = new Surface({
               size:[100,100],
@@ -55,13 +55,13 @@
                   color: 'black'
                 }
             });
-
             var tileMod = new Modifier({
               origin:[0.5,0],
               opacity: 0.5,
               transform: Transform.translate(-1000, -1000, 100)
             });
-            this.tiles.push(tile);
+            this.tiles[i].push(tile);
+
             this.tileModifiers.push(tileMod);
             this._add(tileMod).add(tile);
           }
@@ -75,6 +75,7 @@
           this.positions.push([i*125,j*125]);
         }
       }
+      console.log(this.positions)
     };
 
     function _animateTilesIn(){
@@ -92,12 +93,20 @@
       this.eventHandler   = new EventHandler();
       this.eventHandler.subscribe(controller);
 
-      this.eventHandler.on('addTile', function(data){
-        if(data.tile.previousPosition)
-          this.tiles[data.tile.previousPosition.x * 4 + data.tile.previousPosition.y].setContent('');
-        this.tiles[data.tile.x * 4 + data.tile.y].setContent(data.tile.value);
+      this.eventHandler.on('clear', function(data){
+        this.tiles.forEach(function(row){
+          row.forEach(function(tile){
+            tile.setContent('empty');
+          });
+        });
+        console.log(grid);
       }.bind(this));
 
+      this.eventHandler.on('addTile', function(data){
+        this.tiles[data.tile.x][data.tile.y].setContent(data.tile.value);
+      }.bind(this));
+      Game.exports.setup();
+      _animateTilesIn.call(this);
       // this.eventHandler.on('merged', function(data){
       //   console.log(data.tile);
       // }.bind(this));

@@ -4,16 +4,16 @@ define(function(require, module, exports){
   function KeyboardInputManager() {
     this.events = {};
 
-    if (window.navigator.msPointerEnabled) {
-      //Internet Explorer 10 style
-      this.eventTouchstart    = "MSPointerDown";
-      this.eventTouchmove     = "MSPointerMove";
-      this.eventTouchend      = "MSPointerUp";
-    } else {
-      this.eventTouchstart    = "touchstart";
-      this.eventTouchmove     = "touchmove";
-      this.eventTouchend      = "touchend";
-    }
+    // if (window.navigator.msPointerEnabled) {
+    //   //Internet Explorer 10 style
+    //   this.eventTouchstart    = "MSPointerDown";
+    //   this.eventTouchmove     = "MSPointerMove";
+    //   this.eventTouchend      = "MSPointerUp";
+    // } else {
+    //   this.eventTouchstart    = "touchstart";
+    //   this.eventTouchmove     = "touchmove";
+    //   this.eventTouchend      = "touchend";
+    // }
 
     this.listen();
   }
@@ -61,8 +61,8 @@ define(function(require, module, exports){
       if (!modifiers) {
         if (mapped !== undefined) {
           event.preventDefault();
-          self.emit("move", mapped);
-          // controller.emit("move", mapped);
+          // self.emit("move", mapped);
+          controller.emit("move", mapped);
         }
       }
 
@@ -131,18 +131,18 @@ define(function(require, module, exports){
 
   KeyboardInputManager.prototype.restart = function (event) {
     event.preventDefault();
-    this.emit("restart");
+    controller.emit('restart');
   };
 
   KeyboardInputManager.prototype.keepPlaying = function (event) {
     event.preventDefault();
-    this.emit("keepPlaying");
+    controller.emit('keepPlaying');
   };
 
-  KeyboardInputManager.prototype.bindButtonPress = function (selector, fn) {
-    var button = document.querySelector(selector);
-    button.addEventListener("click", fn.bind(this));
-    button.addEventListener(this.eventTouchend, fn.bind(this));
-  };
+  // KeyboardInputManager.prototype.bindButtonPress = function (selector, fn) {
+  //   var button = document.querySelector(selector);
+  //   button.addEventListener("click", fn.bind(this));
+  //   button.addEventListener(this.eventTouchend, fn.bind(this));
+  // };
   module.exports = KeyboardInputManager;
 });

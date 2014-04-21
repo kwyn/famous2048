@@ -4,7 +4,5 @@ define(function(require, module, exports){
 	var HTMLActuator = require('src/html_actuator');
 	var LocalStorageManager = require('src/local_storage_manager');
 	var GameManager = require('src/game_manager');
-	window.requestAnimationFrame(function () {
-  	new GameManager.exports(4, KeyboardInputManager.exports, HTMLActuator, LocalStorageManager.exports);
-	});
+	module.exports =new GameManager.exports(4, KeyboardInputManager.exports, HTMLActuator, LocalStorageManager.exports);
 });
