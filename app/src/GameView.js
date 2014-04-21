@@ -6,6 +6,7 @@
     var TileView        = require('src/TileView');
     var Easing          = require('famous/transitions/Easing');
     var Timer           = require('famous/utilities/Timer');
+    var EventHandler    = require('famous/core/EventHandler');
 
     var controller      = require('src/controller');
 
@@ -16,8 +17,11 @@
         View.apply(this, arguments);
         _createGameSurface.call(this);
         _createTiles.call(this);
+        _respondToLogic.call(this);
         _coords.call(this);
         _animateTilesIn.call(this);
+
+        console.log(this.tiles);
     };
 
     GameView.prototype = Object.create(View.prototype);
@@ -38,20 +42,26 @@
     };
 
     function _createTiles(){
-      console.log(this);
       this.tileModifiers = [];
+      this.tiles = []
         for(var i = 0; i < 4; i++) {
           for(var j = 0; j < 4; j++){
-              var tile = new TileView({
+              var tile = new Surface({
               size:[100,100],
-              value: i + ' ' + j
+              content: i + ' ' + j,
+                properties:{
+                  backgroundColor: 'grey',
+                  borderRadius: '3px',
+                  color: 'black'
+                }
             });
 
             var tileMod = new Modifier({
               origin:[0.5,0],
+              opacity: 0.5,
               transform: Transform.translate(-1000, -1000, 100)
             });
-
+            this.tiles.push(tile);
             this.tileModifiers.push(tileMod);
             this._add(tileMod).add(tile);
           }
@@ -71,7 +81,6 @@
       for(var i = 0; i < this.tileModifiers.length; i++) {
         Timer.setTimeout(function(i) {
           // var yOffset = this.options.topOffset + this.options.stripOffset * i;
-          console.log(this.positions[i][0], this.positions[i][1])
           this.tileModifiers[i].setTransform(
             Transform.translate(this.positions[i][0]-(200-13.5), this.positions[i][1]+13.5),
             // Transform.translate(0, 0, 0),
@@ -79,7 +88,21 @@
         }.bind(this, i), i * 20)
       }
     };
+    function _respondToLogic(){
+      this.eventHandler   = new EventHandler();
+      this.eventHandler.subscribe(controller);
 
+      this.eventHandler.on('addTile', function(data){
+        console.log(data.tile);
+        console.log(this);
+        this.tiles[data.tile.x * 4 + data.tile.y].setContent(data.tile.value);
+      }.bind(this));
+
+      this.eventHandler.on('merged', function(data){
+        console.log(data.tile);
+      }.bind(this));
+      
+    }
 
     module.exports = GameView;
 });

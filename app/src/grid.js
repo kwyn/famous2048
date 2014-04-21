@@ -1,5 +1,6 @@
 define(function(require, module, exports){
   var Tile = require('src/tile');
+  var controller = require('src/controller');
   
   function Grid(size, previousState) {
     this.size = size;

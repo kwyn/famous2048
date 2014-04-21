@@ -51,13 +51,14 @@ define(function(require, exports, module) {
         this.latteralSync.on('update', function(data) {
             if(Math.abs(data.delta) > 10 ) {
                 console.log('x = ' +data.position);
-                
+
                 this.pageViewX = data.position;
                 this.pageMod.setTransform(Transform.translate(data.position, 0, 0));
             }
         }.bind(this));
          this.verticalSync.on('update', function(data) {
             if(Math.abs(data.delta) > 10 ){
+                console.log(this);
                 console.log('y = ' + data.position);
                 this.pageViewY = data.position;
                 this.pageMod.setTransform(Transform.translate(0, data.position, 0));

@@ -10,9 +10,11 @@ define(function(require, module, exports){
     this.actuator       = new Actuator;
 
     this.startTiles     = 2;
-
+    //origonal event
     this.inputManager.on("move", this.move.bind(this));
+    //new event
     controller.on("move", this.move.bind(this));
+    
     this.inputManager.on("restart", this.restart.bind(this));
     this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
 
