@@ -1,4 +1,6 @@
 define(function(require, module, exports){
+  var controller = require('src/controller');
+
   function KeyboardInputManager() {
     this.events = {};
 
@@ -60,6 +62,7 @@ define(function(require, module, exports){
         if (mapped !== undefined) {
           event.preventDefault();
           self.emit("move", mapped);
+          controller.emit("move", mapped);
         }
       }
 

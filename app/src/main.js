@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var Game = require('src/application');
     var GenericSync        = require('famous/inputs/GenericSync');
     var MouseSync          = require('famous/inputs/MouseSync');
+    var controller         = require('src/controller');
     require('famous/inputs/FastClick');
     GenericSync.register(MouseSync);
     // create the main context

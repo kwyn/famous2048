@@ -4,12 +4,15 @@ define(function(require, exports, module) {
     var Transform       = require('famous/core/Transform');
     var View            = require('famous/core/View');
 
+    var controller = require('src/controller');
+
     var height = 50;
     var width = 100;
 
     function ScoreView() {
         View.apply(this, arguments);
         _createScore.call(this);
+        _handleUpdates.call(this);
     }
 
     ScoreView.prototype = Object.create(View.prototype);
@@ -19,7 +22,6 @@ define(function(require, exports, module) {
         scoreValue : '0',
         scoreTitle : 'Score'
     };
-
     function _createScore(){
         var scoreBackground= new Surface({
             size:[width, height],
@@ -60,7 +62,18 @@ define(function(require, exports, module) {
         this._add(scoreBackground);
         this._add(this.scoreTitleSurface);
         this._add(this.scoreValueModifier).add(this.scoreValueSurface);
-    }
+    };
+  
+    function _handleUpdates(){
+        controller.on("scoreUpdate", function(data){
+            if(this.options.scoreTitle === data.title){
+                this.scoreValueSurface.setContent(data.value);
+                console.log("heard");
+            }
+        }.bind(this));
+    };
+
+
 
     module.exports = ScoreView;
 });

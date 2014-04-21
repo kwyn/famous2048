@@ -1,6 +1,8 @@
 define(function(require, module, exports){
   var Grid = require('src/grid');
-  var Tile = require('src/tile')
+  var Tile = require('src/tile');
+  var controller = require('src/controller');
+  
   function GameManager(size, InputManager, Actuator, StorageManager) {
     this.size           = size; // Size of the grid
     this.inputManager   = new InputManager;
@@ -162,7 +164,7 @@ define(function(require, module, exports){
 
             self.grid.insertTile(merged);
             self.grid.removeTile(tile);
-
+            
             // Converge the two tiles' positions
             tile.updatePosition(positions.next);
 
