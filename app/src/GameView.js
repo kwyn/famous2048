@@ -79,7 +79,7 @@
       for(var i = 0; i < 4; i++) {
         this.positions.push([]);
         for(var j = 0; j < 4; j++){
-          this.positions[i].push([i*this.width/4 - (this.width/2 - this.width/8) ,(j*this.width/4) + this.width/34]);
+          this.positions[i].push([i*this.width/4 - (this.width/2 - this.width/8) ,(j*this.width/4) + this.width/30]);
         }
       }
     };
@@ -121,7 +121,7 @@
               // this.tileModifiers[i][j]
               this.tileModifiers[i][j].setOpacity(0.5);
               this.tileModifiers[i][j].setTransform(
-                Transform.translate(this.positions[i][j][0]-(200-13.5), 500),
+                Transform.translate(this.positions[i][j][0], this.width),
                 { duration: 1000, curve: Easing.outQuint }
               );
             }.bind(this, i, j), i * 100);
@@ -142,7 +142,7 @@
 
               this.tileModifiers[i][j].setOpacity(0.5);
               this.tileModifiers[i][j].setTransform(
-                Transform.translate(this.positions[i][j][0]-(200-13.5), this.positions[i][j][1]+13.5),
+                Transform.translate(this.positions[i][j][0], this.positions[i][j][1]),
                 { duration: 1000, curve: Easing.outQuint }
               );
             }.bind(this, i, j), i * 100);
@@ -154,28 +154,30 @@
       this.eventHandler.on('addTile', function(data){
         var newX = data.tile.x;
         var newY = data.tile.y;
+        var newCoords = this.positions[newX][newY];
         if(data.tile.previousPosition){
           var prevX = data.tile.previousPosition.x;
           var prevY = data.tile.previousPosition.y;
+          var prevCoords = this.positions[prevX][prevY]
           if(prevX !== newX || prevY !== newY){
           var prevMod = this.tileModifiers[prevX][prevY]
 
           prevMod.setTransform(
-            Transform.translate(prevX * 125 -(200-13.5),prevY * 125 + 13.5, 100),
+            Transform.translate(prevCoords[0],prevCoords[1], 100),
             {duration: 50, curve: Easing.outQuint});
 
           prevMod.setTransform(
-            Transform.translate(newX * 125 -(200-13.5),newY * 125 + 13.5),
+            Transform.translate(newCoords[0],newCoords[1]),
             {duration: 100, curve: Easing.outQuint});
 
           prevMod.setTransform(
-            Transform.translate(newX * 125 -(200-13.5),newY * 125 + 13.5, 0),
+            Transform.translate(newCoords[0],newCoords[1], 0),
             {duration: 50, curve: Easing.outQuint});
           
           prevMod.setOpacity(1);
 
           prevMod.setTransform(
-            Transform.translate(prevX * 125 -(200-13.5),prevY * 125 + 13.5),
+            Transform.translate(prevCoords[0],prevCoords[1]),
             {duration:0});
           prevMod.setOpacity(0.5);
           }
