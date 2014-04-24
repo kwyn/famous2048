@@ -20,5 +20,5 @@ define(function(require, exports, module) {
     console.log(appView);
 
     mainContext.add(appView);
-
+    mainContext.setPerspective(800);
 });

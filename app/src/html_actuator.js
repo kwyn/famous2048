@@ -52,26 +52,7 @@ define(function(require, exports, module) {
   HTMLActuator.prototype.addTile = function (tile) {
     var self = this;
 
-    // var position  = tile.previousPosition || { x: tile.x, y: tile.y };
-    // var positionClass = this.positionClass(position);
-
-    // We can't use classlist because it somehow glitches when replacing classes
-    // var classes = ["tile", "tile-" + tile.value, positionClass];
-
-    // this.applyClasses(wrapper, classes);
-
-    // inner.classList.add("tile-inner");
-    // inner.textContent = tile.value;
-    if (tile.previousPosition) {
-    //   // Make sure that the tile gets rendered in the previous position first
-    //   window.requestAnimationFrame(function () {
-    //     classes[2] = self.positionClass({ x: tile.x, y: tile.y });
-    //     self.applyClasses(wrapper, classes); // Update the position
-    //   });
-      // controller.emit('addTile',{
-      //   tile: tile
-      // });
-    } else if (tile.mergedFrom) {
+    if (tile.mergedFrom) {
       // classes.push("tile-merged");
       // this.applyClasses(wrapper, classes);
       // Emits render events the tiles that merged
@@ -81,27 +62,11 @@ define(function(require, exports, module) {
       tile.mergedFrom.forEach(function (merged) {
         self.addTile(merged);
       });
-    } else {
-      // controller.emit('addTile',{
-      //   tile:tile
-      // })
     }
-      controller.emit('addTile',{
-        tile:tile
-      })
-      // classes.push("tile-new");
-      // this.applyClasses(wrapper, classes);
-
-    // Add the inner part of the tile to the wrapper
-    // wrapper.appendChild(inner);
-
-    // Put the tile on the board
-    // this.tileContainer.appendChild(wrapper);
+    controller.emit('addTile',{
+      tile:tile
+    });
   };
-
-  // HTMLActuator.prototype.applyClasses = function (element, classes) {
-  //   element.setAttribute("class", classes.join(" "));
-  // };
 
   HTMLActuator.prototype.normalizePosition = function (position) {
     return { x: position.x + 1, y: position.y + 1 };
@@ -124,9 +89,7 @@ define(function(require, exports, module) {
   HTMLActuator.prototype.message = function (won) {
     var type    = won ? "game-won" : "game-over";
     var message = won ? "You win!" : "Game over!";
-
-    this.messageContainer.classList.add(type);
-    this.messageContainer.getElementsByTagName("p")[0].textContent = message;
+    controller.emit(type);
   };
 
   HTMLActuator.prototype.clearMessage = function () {

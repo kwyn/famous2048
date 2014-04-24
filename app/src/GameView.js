@@ -42,12 +42,12 @@
 
     function _createTiles(){
       this.tileModifiers = [];
-      this.tileZModifiers = [];
+      this.tileRModifiers = [];
       this.tiles = []
         for(var i = 0; i < 4; i++) {
           this.tiles.push([]);
           this.tileModifiers.push([]);
-          this.tileZModifiers.push([]);
+          this.tileRModifiers.push([]);
           for(var j = 0; j < 4; j++){
               var tile = new Surface({
               size:[100,100],
@@ -58,18 +58,20 @@
                   color: 'black'
                 }
             });
-            var tileMod = new Modifier({
+            var tileModifier = new Modifier({
               origin:[0.5,0],
               opacity: 0.5,
               transform: Transform.translate(-1000, -1000, 100)
             });
             this.tiles[i].push(tile);
-            this.tileModifiers[i].push(tileMod);
+            this.tileModifiers[i].push(tileModifier);
 
-            var tileZMod = new Modifier();
-            this.tileZModifiers[i].push(tileZMod);
+            var RModifier = new Modifier({
+              transform: Transform.rotateZ(0)
+            });
+            this.tileRModifiers[i].push(RModifier);
 
-            this._add(tileMod).add(tileZMod).add(tile);
+            this._add(tileModifier).add(RModifier).add(tile);
           }
         }
     };
@@ -92,8 +94,8 @@
             this.tileModifiers[i][j].setTransform(
               Transform.translate(this.positions[i][j][0]-(200-13.5), this.positions[i][j][1]+13.5),
               // Transform.translate(0, 0, 0),
-              { duration: 400, curve: Easing.outQuint });
-          }.bind(this, i, j), i * 20)
+              { duration: 1000, curve: Easing.outQuint });
+          }.bind(this, i, j), i * 100)
         }
       }
     };
@@ -106,28 +108,51 @@
       this.eventHandler.on('clear', function(data){
         this.tiles.forEach(function(row){
           row.forEach(function(tile){
-            tile.setContent('empty');
+            tile.setContent('');
           });
         });
         console.log(grid);
       }.bind(this));
       
+      this.eventHandler.on('game-over', function(){
+
+        for(var i = 0; i < 4; i++){
+          for(var j = 0; j < 4; j++){
+            Timer.setTimeout(function(i, j) {
+              console.log(this);
+              this.tileRModifiers[i][j].setTransform(
+                Transform.rotateZ(i),
+                {duration:1000}
+              );
+              // this.tileModifiers[i][j]
+              this.tileModifiers[i][j].setOpacity(0.5);
+              this.tileModifiers[i][j].setTransform(
+                Transform.translate(this.positions[i][j][0]-(200-13.5), 500),
+                { duration: 1000, curve: Easing.outQuint }
+              );
+            }.bind(this, i, j), i * 100);
+
+          }
+        }
+      }.bind(this));
+
       this.eventHandler.on('restart', function(data){
         for(var i = 0; i < 4; i++){
           for(var j = 0; j < 4; j++){
             this.tileModifiers[i][j].setOpacity(1);
+            this.tileRModifiers[i][j].setTransform(
+              Transform.rotateZ(0));
             this.tileModifiers[i][j].setTransform(
-              Transform.translate(-1000, -1000, 100)
-            );
-          }
-        }
-        for(var i = 0; i < 4; i++){
-          for(var j = 0; j < 4; j++){
-            this.tileModifiers[i][j].setOpacity(0.5);
-            this.tileModifiers[i][j].setTransform(
-              Transform.translate(this.positions[i][j][0]-(200-13.5), this.positions[i][j][1]+13.5),
-              { duration: 1000, curve: Easing.outQuint }
-            );
+              Transform.translate(-1000, -1000, 100));
+            Timer.setTimeout(function(i, j) {
+
+              this.tileModifiers[i][j].setOpacity(0.5);
+              this.tileModifiers[i][j].setTransform(
+                Transform.translate(this.positions[i][j][0]-(200-13.5), this.positions[i][j][1]+13.5),
+                { duration: 1000, curve: Easing.outQuint }
+              );
+            }.bind(this, i, j), i * 100);
+
           }
         }
       }.bind(this));
@@ -138,32 +163,37 @@
         if(data.tile.previousPosition){
           var prevX = data.tile.previousPosition.x;
           var prevY = data.tile.previousPosition.y;
+          if(prevX !== newX || prevY !== newY){
           var prevMod = this.tileModifiers[prevX][prevY]
+
+          prevMod.setTransform(
+            Transform.translate(prevX * 125 -(200-13.5),prevY * 125 + 13.5, 100),
+            {duration: 50, curve: Easing.outQuint});
 
           prevMod.setTransform(
             Transform.translate(newX * 125 -(200-13.5),newY * 125 + 13.5),
             {duration: 100, curve: Easing.outQuint});
 
+          prevMod.setTransform(
+            Transform.translate(newX * 125 -(200-13.5),newY * 125 + 13.5, 0),
+            {duration: 50, curve: Easing.outQuint});
+          
           prevMod.setOpacity(1);
 
           prevMod.setTransform(
             Transform.translate(prevX * 125 -(200-13.5),prevY * 125 + 13.5),
             {duration:0});
           prevMod.setOpacity(0.5);
-
+          }
         }
 
         this.tiles[data.tile.x][data.tile.y].setContent(data.tile.value);
-        this.tileZModifiers[data.tile.x][data.tile.y].setTransform(Transform.translate(0, 0, 10), {duration: 400});
       }.bind(this));
 
       Game.exports.setup();
 
       _animateTilesIn.call(this);
-      // this.eventHandler.on('merged', function(data){
-      //   console.log(data.tile);
-      // }.bind(this));
-      
+
     }
 
     module.exports = GameView;
