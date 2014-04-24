@@ -68,7 +68,6 @@ define(function(require, exports, module) {
         controller.on("scoreUpdate", function(data){
             if(this.options.scoreTitle === data.title){
                 this.scoreValueSurface.setContent(data.value);
-                console.log("heard", data.value);
             }
         }.bind(this));
     };

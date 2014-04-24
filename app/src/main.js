@@ -13,11 +13,16 @@ define(function(require, exports, module) {
     // create the main context
     var mainContext = Engine.createContext();
 
+    var portSize = [500, 1000];
+    if(window.innerWidth < 520){
+        portSize = [280, 1000];
+    }
+
+    console.log("main", portSize);
     // your app here
     var appView = new AppView({
-        size:[500,1000]
+        size: portSize
     });
-    console.log(appView);
 
     mainContext.add(appView);
     mainContext.setPerspective(800);

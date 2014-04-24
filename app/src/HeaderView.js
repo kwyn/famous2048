@@ -10,8 +10,6 @@ define(function(require, exports, module) {
 
     var storage = new LocalStorageManager.exports();
 
-    var width = 500;
-    var height = 250;
     function HeaderView() {
         View.apply(this, arguments);
         _createHeader.call(this);
@@ -23,8 +21,15 @@ define(function(require, exports, module) {
     HeaderView.DEFAULT_OPTIONS = {};
 
     function _createHeader() {
+        console.log("HeaderView", this.options.size);
+        this.width = this.options.size[0];
+        this.height = this.options.size[1];
+        this.offset = 175;
+        if(this.width < 520){
+            this.offset = 105;
+        }
         var backgroundSurface = new Surface({
-            size:[width, height],
+            size:[this.width, this.height/5],
             properties: {
                 color: 'white',
                 backgroundColor: 'black'
@@ -47,11 +52,11 @@ define(function(require, exports, module) {
         }.bind(this));
 
         this.newGameMod = new Modifier({
-            transform: Transform.translate(150, 150, 0)
+            transform: Transform.translate(this.offset, 150, 0)
         });
 
         this.titleSurface = new Surface({
-            size:[width/2, height],
+            size:[this.width/2, this.height],
             content: '20.48',
             properties:{
                 color: 'white',
@@ -71,18 +76,19 @@ define(function(require, exports, module) {
         });
 
         this.bestScoreModifier = new Modifier({
-            transform: Transform.translate(150, 25, 0)
+            origin:[0.5, 0],
+            transform: Transform.translate(-this.offset, 150, 0)
         });
         this.scoreModifier =  new Modifier({
-            origin: [0.5, 0],
-            transform: Transform.translate(150, 85, 0)
+            origin:[0.5, 0],
+            transform: Transform.translate(0,150, 0)
         });
 
         this.backgrounModifier = new Modifier();
 
         this.titleModifier = new Modifier({
             origin:[0.5,0],
-            transform: Transform.translate(-100, 25, 0)
+            transform: Transform.translate(0, 50, 0)
         })
         
         this._add(backgroundSurface);

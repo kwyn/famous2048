@@ -30,22 +30,29 @@ define(function(require, exports, module) {
         this._add(this.backgroundSurface);
     }
 
+    function _createHeaderView(){
+        this.width = this.options.size[0]-50;
+        this.height = this.options.size[0]-50;
+        this.headerView = new HeaderView({
+            size: [this.width, 250]
+        });
+        this._add(this.headerView);
+    };
     function _createGameView(){
+        
+        console.log("GameView", this.options.size)
         this.gameView = new GameView({
-            size:[500,500]
+            size: [this.width, this.width]
         });
         this.gameViewMod = new Modifier({
             origin:[0.5,0],
-            transform: Transform.translate(0, 250, 0)
+            transform: Transform.translate(0, 250, 1),
+            opacity:1
         })
         this.gameView.pipe(this._eventOutput);
         this._add(this.gameViewMod).add(this.gameView);
     };
 
-    function _createHeaderView(){
-        this.headerView = new HeaderView();
-        this._add(this.headerView);
-    };
 
     module.exports = PageView;
 });

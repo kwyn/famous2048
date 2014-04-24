@@ -10,8 +10,7 @@
     var grid            = require('src/grid');
     var Game            = require('src/application');
     var controller      = require('src/controller');
-    var height = 500;
-    var width = 500;
+    var Random          = require('famous/math/Random');
 
     function GameView() {
         View.apply(this, arguments);
@@ -19,8 +18,6 @@
         _createTiles.call(this);
         _respondToLogic.call(this);
         _coords.call(this);
-
-        console.log(this.tiles);
     };
 
     GameView.prototype = Object.create(View.prototype);
@@ -30,7 +27,7 @@
 
     function _createGameSurface() {
   		this.backgroundSurface = new Surface({
-  				size: [width, height],
+  				size: this.options.size,
           properties: {
             border: '1px solid grey'
           }
@@ -41,6 +38,7 @@
     };
 
     function _createTiles(){
+      this.width = this.options.size[0];
       this.tileModifiers = [];
       this.tileRModifiers = [];
       this.tiles = []
@@ -50,7 +48,7 @@
           this.tileRModifiers.push([]);
           for(var j = 0; j < 4; j++){
               var tile = new Surface({
-              size:[100,100],
+              size:[this.width/5, this.width/5],
               content: '',
                 properties:{
                   backgroundColor: 'grey',
@@ -81,10 +79,9 @@
       for(var i = 0; i < 4; i++) {
         this.positions.push([]);
         for(var j = 0; j < 4; j++){
-          this.positions[i].push([i*125,j*125]);
+          this.positions[i].push([i*this.width/4 - (this.width/2 - this.width/8) ,(j*this.width/4) + this.width/34]);
         }
       }
-      console.log(this.positions)
     };
 
     function _animateTilesIn(){
@@ -92,8 +89,7 @@
         for(var j = 0; j < this.tileModifiers[i].length; j++){
           Timer.setTimeout(function(i, j) {
             this.tileModifiers[i][j].setTransform(
-              Transform.translate(this.positions[i][j][0]-(200-13.5), this.positions[i][j][1]+13.5),
-              // Transform.translate(0, 0, 0),
+              Transform.translate(this.positions[i][j][0], this.positions[i][j][1]),
               { duration: 1000, curve: Easing.outQuint });
           }.bind(this, i, j), i * 100)
         }
@@ -111,7 +107,6 @@
             tile.setContent('');
           });
         });
-        console.log(grid);
       }.bind(this));
       
       this.eventHandler.on('game-over', function(){
@@ -119,7 +114,6 @@
         for(var i = 0; i < 4; i++){
           for(var j = 0; j < 4; j++){
             Timer.setTimeout(function(i, j) {
-              console.log(this);
               this.tileRModifiers[i][j].setTransform(
                 Transform.rotateZ(i),
                 {duration:1000}

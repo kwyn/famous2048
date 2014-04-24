@@ -24,8 +24,9 @@ define(function(require, exports, module) {
     AppView.DEFAULT_OPTIONS = {};
 
     function _createPageView() {
+        console.log("PageView", this.options.size);
         this.pageView = new PageView({
-            size: [500,1000]
+            size: this.options.size
         });
         this.pageMod = new Modifier({
             origin: [0.5,0]
