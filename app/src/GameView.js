@@ -14,6 +14,7 @@
     var grid            = require('src/grid');
     var controller      = require('src/controller');
 
+
     Transitionable.registerMethod('spring', SpringTransition);
 
     var spring = {
@@ -126,20 +127,24 @@
       }.bind(this));
       
       this.eventHandler.on('game-over', function(){
+        console.log('gamelost')
 
         for(var i = 0; i < 4; i++){
           for(var j = 0; j < 4; j++){
             Timer.setTimeout(function(i, j) {
-              this.tileRModifiers[i][j].setTransform(
-                Transform.rotate(i),
-                {duration:1000}
-              );
+              // this.tileRModifiers[i][j].setTransform(
+              //   Transform.rotateZ(i),
+              //   {duration:1000}
+              // );
               // this.tileModifiers[i][j]
-              this.tileModifiers[i][j].setOpacity(0.5);
               this.tileModifiers[i][j].setTransform(
-                Transform.translate(this.positions[i][j][0], this.width),
-                spring
-              );
+                Transform.translate(Random.range(-this.width/2, this.width/2), this.width),
+                {duration:100}, 
+                function(i,j){
+                  this.tileRModifiers[i][j].setTransform(
+                    Transform.rotate(Math.PI+1, Random.range(-Math.PI, Math.PI), Random.range(0, Math.PI/2)), 
+                    {duration:100})
+                }.bind(this, i, j));
             }.bind(this, i, j), i * 100);
 
           }
@@ -153,7 +158,7 @@
           for(var j = 0; j < 4; j++){
             this.tileModifiers[i][j].setOpacity(1);
             this.tileRModifiers[i][j].setTransform(
-              Transform.rotateZ(0));
+              Transform.rotate(0, 0 , 0));
             this.tileModifiers[i][j].setTransform(
               Transform.translate(-1000, -1000, 100));
             Timer.setTimeout(function(i, j) {
