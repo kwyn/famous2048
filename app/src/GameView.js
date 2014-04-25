@@ -39,7 +39,6 @@
     GameView.DEFAULT_OPTIONS = {};
 
     function _createGameSurface() {
-      console.log(this.options.size);
   		this.backgroundSurface = new Surface({
   				size: this.options.size
       });
@@ -62,7 +61,6 @@
           textShadow: '0 0 '+this.width/5+'px #3cf'
         }
       });
-      console.log(this.messageSurface);
       
       this.messageSurface.pipe(this._eventOutput);
       this.messageSurface.on('click', function(){
@@ -75,7 +73,6 @@
       });
 
       this.eventHandler.on('game-over', function(){
-        console.log("game over")
         Timer.setTimeout(function(){
           this.messageSurface.setContent('Game Over');
           this.messageModifier.setTransform(Transform.translate(0, 0, 3), spring);
@@ -98,7 +95,6 @@
     }
     function _createTiles(){
       this.width = this.options.size[0];
-      console.log(this.width);
       this.tileModifiers = [];
       this.tileRModifiers = [];
       this.tiles = []
@@ -176,16 +172,9 @@
       }.bind(this));
       
       this.eventHandler.on('game-over', function(){
-        console.log('gamelost')
-
         for(var i = 0; i < 4; i++){
           for(var j = 0; j < 4; j++){
             Timer.setTimeout(function(i, j) {
-              // this.tileRModifiers[i][j].setTransform(
-              //   Transform.rotateZ(i),
-              //   {duration:1000}
-              // );
-              // this.tileModifiers[i][j]
               this.tileModifiers[i][j].setTransform(
                 Transform.translate(Random.range(-this.width/2, this.width/2), this.width),
                 {duration:100}, 
@@ -198,8 +187,7 @@
 
           }
         }
-        // Timer.setTimeout(function(){
-        // }.bind(this), 1600);
+
       }.bind(this));
 
       this.eventHandler.on('restart', function(data){

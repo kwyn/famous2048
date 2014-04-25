@@ -23,7 +23,6 @@ define(function(require, module, exports){
   // Restart the game
   GameManager.prototype.restart = function () {
     this.storageManager.clearGameState();
-    this.actuator.continueGame(); // Clear the game won/lost message
     this.setup();
   };
 

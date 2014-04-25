@@ -32,7 +32,6 @@ define(function(require, exports, module) {
     HeaderView.DEFAULT_OPTIONS = {};
 
     function _createHeader() {
-        console.log("HeaderView", this.options.size);
         this.width = this.options.size[0];
         this.height = this.options.size[1];
         this.offset = 175;
@@ -54,7 +53,6 @@ define(function(require, exports, module) {
         })
         
         this.newGameButton.on('click', function(event){
-            console.log(event);
             controller.emit('restart');
         });
 

@@ -12,7 +12,7 @@ define(function(require, exports, module) {
     require('famous/inputs/FastClick');
     GenericSync.register(TouchSync);
     GenericSync.register(MouseSync);
-    // create the main context
+    
     var mainContext = Engine.createContext();
 
     var portSize = [500, 1000];
@@ -21,8 +21,6 @@ define(function(require, exports, module) {
         portSize = [280, 1000];
     }
 
-    console.log("main", portSize);
-    // your app here
     var appView = new AppView({
         size: portSize
     });
