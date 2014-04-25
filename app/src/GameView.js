@@ -3,14 +3,25 @@
     var Modifier        = require('famous/core/Modifier');
     var Transform       = require('famous/core/Transform');
     var View            = require('famous/core/View');
-    var TileView        = require('src/TileView');
     var Easing          = require('famous/transitions/Easing');
     var Timer           = require('famous/utilities/Timer');
     var EventHandler    = require('famous/core/EventHandler');
-    var grid            = require('src/grid');
     var Game            = require('src/application');
-    var controller      = require('src/controller');
     var Random          = require('famous/math/Random');
+    var Transitionable  = require('famous/transitions/Transitionable');
+    var SpringTransition = require('famous/transitions/SpringTransition');
+    var TileView        = require('src/TileView');
+    var grid            = require('src/grid');
+    var controller      = require('src/controller');
+
+    Transitionable.registerMethod('spring', SpringTransition);
+
+    var spring = {
+        method: 'spring',
+        period: 1000,
+        dampingRatio: 0.6
+    };
+    
 
     function GameView() {
         View.apply(this, arguments);
@@ -48,14 +59,18 @@
           for(var j = 0; j < 4; j++){
               var tile = new Surface({
               size:[this.width/5, this.width/5],
-              content: '',
+                content: '',
                 properties:{
-                  backgroundColor: 'rgba(73, 160, 154, 0.584314)',
+                  backgroundColor: 'rgba(73, 160, 154,1 )',
                   boxShadow: 'rgba(231, 254, 237, 0.6) 0px 0px '+ this.width/15 +'px 0px',
-                  color: 'black',
+                  color: 'white',
+                  textShadow: '0 0 '+this.width/15+'px #3cf',
+                  fontWeight: 'bold',
                   textAlign: 'center',
-                  fontSize: this.width/10 + 'px'
-                },
+                  fontSize: this.width/10 + 'px',
+                  lineHeight: this.width/5 +'px',
+                  borderRadius: '3px'
+                }
             });
             var tileModifier = new Modifier({
               origin:[0.5,0],
@@ -91,7 +106,7 @@
           Timer.setTimeout(function(i, j) {
             this.tileModifiers[i][j].setTransform(
               Transform.translate(this.positions[i][j][0], this.positions[i][j][1]),
-              { duration: 1000, curve: Easing.outQuint });
+              spring);
           }.bind(this, i, j), 2000 + (i * 100) );
         }
       }
@@ -116,14 +131,14 @@
           for(var j = 0; j < 4; j++){
             Timer.setTimeout(function(i, j) {
               this.tileRModifiers[i][j].setTransform(
-                Transform.rotateZ(i),
+                Transform.rotate(i),
                 {duration:1000}
               );
               // this.tileModifiers[i][j]
               this.tileModifiers[i][j].setOpacity(0.5);
               this.tileModifiers[i][j].setTransform(
                 Transform.translate(this.positions[i][j][0], this.width),
-                { duration: 1000, curve: Easing.outQuint }
+                spring
               );
             }.bind(this, i, j), i * 100);
 
@@ -146,7 +161,7 @@
               this.tileModifiers[i][j].setOpacity(0.5);
               this.tileModifiers[i][j].setTransform(
                 Transform.translate(this.positions[i][j][0], this.positions[i][j][1]),
-                { duration: 1000, curve: Easing.outQuint }
+                spring
               );
             }.bind(this, i, j), i * 100);
 

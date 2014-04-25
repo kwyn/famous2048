@@ -14,6 +14,12 @@ define(function(require, exports, module) {
 
     Transitionable.registerMethod('spring', SpringTransition);
 
+   var spring = {
+      method: 'spring',
+      period: 1000,
+      dampingRatio: 0.3
+    };
+    
     function HeaderView() {
         View.apply(this, arguments);
         _createHeader.call(this);
@@ -30,7 +36,7 @@ define(function(require, exports, module) {
         this.width = this.options.size[0];
         this.height = this.options.size[1];
         this.offset = 175;
-        
+
         if(this.width < 520){
             this.offset = 105;
         }
@@ -56,11 +62,11 @@ define(function(require, exports, module) {
         });
 
         this.titleSurface = new Surface({
-            size:[this.width/2, this.height],
+            size:[this.width, this.height],
             content: '20.48',
             properties:{
                 color: 'white',
-                fontSize: '50px',
+                fontSize: '75px',
                 textAlign: 'center'
                 }
         });
@@ -84,7 +90,6 @@ define(function(require, exports, module) {
             transform: Transform.translate(0, -200, 0)
         });
 
-        this.backgrounModifier = new Modifier();
 
         this.titleModifier = new Modifier({
             origin:[0.5,0],
@@ -100,18 +105,14 @@ define(function(require, exports, module) {
 
     function _animateInHeader(){
         this.modifiers = [this.bestScoreModifier, this.scoreModifier, this.newGameModifier];
-        var spring = {
-          method: 'spring',
-          period: 1000,
-          dampingRatio: 0.2
-        };
+ 
         for(var i = 0; i < this.modifiers.length; i ++){
             Timer.setTimeout(function(i){
                 this.modifiers[i].setTransform(Transform.translate(-this.offset+(i*this.offset),150), spring);
             }.bind(this, i), i*200); 
         }
         Timer.setTimeout(function(){
-            this.titleModifier.setOpacity(1,{duration:500});
+            this.titleModifier.setOpacity(1,{duration:1000});
         }.bind(this), this.modifiers.length*500)
         
     }

@@ -13,18 +13,14 @@ define(function(require, exports, module) {
     tileView.prototype.constructor = tileView;
 
     tileView.DEFAULT_OPTIONS = {
-    	size: [100,100],
-    	value: 'ha'
+    	size: [100,100]
     };
 
     function _addTile() {
     	this.tileSurface = new Surface({
     		size: this.options.size,
-    		content: this.options.value,
-    		properties:{
-    			backgroundColor: 'grey',
-    			borderRadius: '3px'
-    		}
+    		content: '',
+    		properties: this.options.properties
     	});
     	this.tileMod = new Modifier({
     		opacity: 0.5
