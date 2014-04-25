@@ -21,18 +21,15 @@ define(function(require, exports, module) {
 
     function _createBackground(){
         this.backgroundSurface = new Surface({
-            size: [undefined, undefined],
-            properties:{
-                backgroundColor: 'black'
-            }
+            size: [undefined, undefined]
         });
 
         this._add(this.backgroundSurface);
     }
 
     function _createHeaderView(){
-        this.width = this.options.size[0]-50;
-        this.height = this.options.size[0]-50;
+        this.width = this.options.size[0];
+        this.height = this.options.size[0];
         this.headerView = new HeaderView({
             size: [this.width, 250]
         });

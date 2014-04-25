@@ -26,12 +26,10 @@
     GameView.DEFAULT_OPTIONS = {};
 
     function _createGameSurface() {
+      console.log(this.options.size);
   		this.backgroundSurface = new Surface({
-  				size: this.options.size,
-          properties: {
-            border: '1px solid grey'
-          }
-       });
+  				size: this.options.size
+      });
       this.backgroundSurface.pipe(this._eventOutput);
 
   		this._add(this.backgroundSurface);
@@ -39,6 +37,7 @@
 
     function _createTiles(){
       this.width = this.options.size[0];
+      console.log(this.width);
       this.tileModifiers = [];
       this.tileRModifiers = [];
       this.tiles = []
@@ -51,10 +50,12 @@
               size:[this.width/5, this.width/5],
               content: '',
                 properties:{
-                  backgroundColor: 'grey',
-                  borderRadius: '3px',
-                  color: 'black'
-                }
+                  backgroundColor: 'rgba(73, 160, 154, 0.584314)',
+                  boxShadow: 'rgba(231, 254, 237, 0.6) 0px 0px '+ this.width/15 +'px 0px',
+                  color: 'black',
+                  textAlign: 'center',
+                  fontSize: this.width/10 + 'px'
+                },
             });
             var tileModifier = new Modifier({
               origin:[0.5,0],
@@ -91,7 +92,7 @@
             this.tileModifiers[i][j].setTransform(
               Transform.translate(this.positions[i][j][0], this.positions[i][j][1]),
               { duration: 1000, curve: Easing.outQuint });
-          }.bind(this, i, j), i * 100)
+          }.bind(this, i, j), 2000 + (i * 100) );
         }
       }
     };
@@ -128,6 +129,8 @@
 
           }
         }
+        // Timer.setTimeout(function(){
+        // }.bind(this), 1600);
       }.bind(this));
 
       this.eventHandler.on('restart', function(data){
@@ -160,30 +163,30 @@
           var prevY = data.tile.previousPosition.y;
           var prevCoords = this.positions[prevX][prevY]
           if(prevX !== newX || prevY !== newY){
-          var prevMod = this.tileModifiers[prevX][prevY]
+          var prevModifier = this.tileModifiers[prevX][prevY]
 
-          prevMod.setTransform(
+          prevModifier.setTransform(
             Transform.translate(prevCoords[0],prevCoords[1], 100),
             {duration: 50, curve: Easing.outQuint});
 
-          prevMod.setTransform(
+          prevModifier.setTransform(
             Transform.translate(newCoords[0],newCoords[1]),
             {duration: 100, curve: Easing.outQuint});
 
-          prevMod.setTransform(
+          prevModifier.setTransform(
             Transform.translate(newCoords[0],newCoords[1], 0),
             {duration: 50, curve: Easing.outQuint});
           
-          prevMod.setOpacity(1);
+          prevModifier.setOpacity(1);
 
-          prevMod.setTransform(
+          prevModifier.setTransform(
             Transform.translate(prevCoords[0],prevCoords[1]),
             {duration:0});
-          prevMod.setOpacity(0.5);
+          prevModifier.setOpacity(0.5);
           }
         }
 
-        this.tiles[data.tile.x][data.tile.y].setContent(data.tile.value);
+        this.tiles[newX][newY].setContent(data.tile.value);
       }.bind(this));
 
       Game.exports.setup();
