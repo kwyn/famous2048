@@ -36,27 +36,34 @@ define(function(require, exports, module) {
     }
 
     function _handleTouch() {
-
-        this.latteralSync = new GenericSync(function() {
+        /* 0 : up
+         * 1 : right
+         * 2 : down
+         * 3 : left
+         */
+        this.sync = new GenericSync(function() {
             return this.pageViewX;
-        }.bind(this), {direction: GenericSync.DIRECTION_X});
-
-        this.verticalSync = new GenericSync(function(){
-            return this.pageViewY;
-        }.bind(this), {direction: GenericSync.DIRECTION_Y});
-
-        this.pageView.pipe(this.latteralSync);
-        this.pageView.pipe(this.verticalSync);
-
-        this.latteralSync.on('update', function(data) {
-            if(Math.abs(data.delta) > 10 ) {
-                console.log('x = ' +data.position);
-            }
         }.bind(this));
-         this.verticalSync.on('update', function(data) {
-            if(Math.abs(data.delta) > 10 ){
-                console.log(this);
-                console.log('y = ' + data.position);
+
+        this.pageView.pipe(this.sync);
+
+        this.sync.on('end', function(data) {
+            //check if x or y direction movement is greater
+            if(Math.abs(data.delta[0]) > Math.abs(data.delta[1])){
+                //detemine x direction. 1 : right, 3 : left
+                if(data.delta[0] > 0){
+                    controller.emit('move', 1);
+                }else if (data.delta[0] < 0){
+                    controller.emit('move', 3);
+                }
+            }else{
+                //determine y direction. 0 : up, 2: down
+                if(data.delta[1] > 0){
+                    contorller.emit('move', 2);
+                }else if(data.delta[1] < 0){
+                    controller.emit('move', 0);
+                }
+
             }
         }.bind(this));
     }

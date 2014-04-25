@@ -45,7 +45,11 @@
       });
       this.backgroundSurface.pipe(this._eventOutput);
 
-  		this._add(this.backgroundSurface);
+      this.backgroundSurfaceModifier = new Modifier({
+          transform: Transform.translate(0, 0, 1)
+      })
+
+  		this._add(this.backgroundSurfaceModifier).add(this.backgroundSurface);
     };
 
     function _createMessageSurface(){
@@ -74,13 +78,13 @@
         console.log("game over")
         Timer.setTimeout(function(){
           this.messageSurface.setContent('Game Over');
-          this.messageModifier.setTransform(Transform.translate(0, 0, 0), spring);
+          this.messageModifier.setTransform(Transform.translate(0, 0, 3), spring);
           this.messageModifier.setOpacity(1, {duration: 300});
         }.bind(this), 1000)
       }.bind(this));
 
       this.eventHandler.on('game-won', function(){
-        this.messageModifier.setTransform(Transform.translate(0, 0, 0), spring);
+        this.messageModifier.setTransform(Transform.translate(0, 0, 3), spring);
         this.messageModifier.setOpacity(1, {duration: 300});
       }.bind(this))
 

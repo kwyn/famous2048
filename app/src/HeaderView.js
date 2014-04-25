@@ -53,16 +53,19 @@ define(function(require, exports, module) {
             }
         })
         
-        this.newGameButton.on('click', function(){
+        this.newGameButton.on('click', function(event){
+            console.log(event);
             controller.emit('restart');
-        }.bind(this));
+        });
+
+        this.newGameButton.pipe(this._eventOutput);
 
         this.newGameModifier = new Modifier({
             transform: Transform.translate(this.offset, -200, 0)
         });
 
         this.titleSurface = new Surface({
-            size:[this.width, this.height],
+            size:[this.width, 100],
             content: '20.48',
             properties:{
                 color: 'white',
@@ -97,10 +100,10 @@ define(function(require, exports, module) {
             opacity: 0
         })
         
-        this._add(this.titleModifier).add(this.titleSurface);
         this._add(this.bestScoreModifier).add(bestScoreView);
         this._add(this.scoreModifier).add(scoreView);
         this._add(this.newGameModifier).add(this.newGameButton);
+        this._add(this.titleModifier).add(this.titleSurface);
     };
 
     function _animateInHeader(){
