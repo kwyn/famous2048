@@ -14,6 +14,7 @@ define(function(require, exports, module) {
     var mainContext = Engine.createContext();
 
     var portSize = [500, 1000];
+    
     if(window.innerWidth < 520){
         portSize = [280, 1000];
     }

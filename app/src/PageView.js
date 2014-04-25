@@ -36,10 +36,12 @@ define(function(require, exports, module) {
         this._add(this.headerView);
     };
     function _createGameView(){
-        
-        console.log("GameView", this.options.size)
+        var width = this.options.size[0];
+        if(window.innerHeight < width + 250){
+            width = window.innerHeight -260;
+        }
         this.gameView = new GameView({
-            size: [this.width, this.width]
+            size: [width, width]
         });
         this.gameViewMod = new Modifier({
             origin:[0.5,0],

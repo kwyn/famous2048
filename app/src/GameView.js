@@ -29,6 +29,7 @@
         _createGameSurface.call(this);
         _createTiles.call(this);
         _respondToLogic.call(this);
+        _createMessageSurface.call(this);
         _coords.call(this);
     };
 
@@ -47,6 +48,50 @@
   		this._add(this.backgroundSurface);
     };
 
+    function _createMessageSurface(){
+      this.messageSurface = new Surface({
+        size: this.options.size,
+        properties: {
+          color: 'white',
+          fontSize: this.width/4+'px',
+          textAlign: 'center',
+          textShadow: '0 0 '+this.width/5+'px #3cf'
+        }
+      });
+      console.log(this.messageSurface);
+      
+      this.messageSurface.pipe(this._eventOutput);
+      this.messageSurface.on('click', function(){
+        controller.emit('restart');
+      });
+
+      this.messageModifier = new Modifier({
+        opacity:0,
+        transform: Transform.translate(0,-1000,0)
+      });
+
+      this.eventHandler.on('game-over', function(){
+        console.log("game over")
+        Timer.setTimeout(function(){
+          this.messageSurface.setContent('Game Over');
+          this.messageModifier.setTransform(Transform.translate(0, 0, 0), spring);
+          this.messageModifier.setOpacity(1, {duration: 300});
+        }.bind(this), 1000)
+      }.bind(this));
+
+      this.eventHandler.on('game-won', function(){
+        this.messageModifier.setTransform(Transform.translate(0, 0, 0), spring);
+        this.messageModifier.setOpacity(1, {duration: 300});
+      }.bind(this))
+
+      this.eventHandler.on('restart', function(){
+        this.messageModifier.setOpacity(0, {duration: 300});
+        this.messageModifier.setTransform(Transform.translate(0, -1000, 0), {duration:0});
+        this.messageSurface.setContent('');
+      }.bind(this));
+
+      this._add(this.messageModifier).add(this.messageSurface);
+    }
     function _createTiles(){
       this.width = this.options.size[0];
       console.log(this.width);
