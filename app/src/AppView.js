@@ -58,7 +58,7 @@ define(function(require, exports, module) {
             }else{
                 //determine y direction. 0 : up, 2: down
                 if(data.delta[1] > 0){
-                    contorller.emit('move', 2);
+                    controller.emit('move', 2);
                 }else if(data.delta[1] < 0){
                     controller.emit('move', 0);
                 }
